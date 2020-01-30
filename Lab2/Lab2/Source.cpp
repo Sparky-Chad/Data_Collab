@@ -5,7 +5,13 @@
 #include <cstdlib>
 using namespace std;
 
+/*
 
+	Source.cpp
+	Creates and manages the basketball game and uses the player class. 
+
+	Created Cooperatively by Chad Lape and Colton Murra
+*/
 
 
 void stats();
@@ -55,7 +61,7 @@ Player Players[] = { mike,lebron,kobe,colton,james };
 int main() {
 	
 	cout << "Beginning game"<<endl;
-	while (user_possesions < 5) {
+	while (user_possesions < 20) {
 		
 		//begins the turn and deals with possesions
 		players_turn_start();
@@ -73,7 +79,7 @@ int main() {
 //start Players turn
 void players_turn_start() {
 
-	cout << "Begining round, adding a possesion";
+	cout << "Begining round, adding a possesion\n";
 	user_possesions++;
 	players_possesion();
 
@@ -152,7 +158,7 @@ void shoot(int i) {
 		shoot();
 	}
 	else {
-		cout << Players[i].getName() << " Scored!";
+		cout << Players[i].getName() << " Scored!\n";
 		user_score += temp;
 	}
 }
@@ -211,7 +217,7 @@ void pass(int currentPlayer) {
 	while (nextPlayer == currentPlayer) {
 		nextPlayer = (rand() % 5);
 	}
-	cout <<Players[currentPlayer].getName()<< " passes to " << Players[nextPlayer].getName() << "!\n";
+	cout << Players[currentPlayer].getName() << " passes to " << Players[nextPlayer].getName() << "!\n";
 	if (Players[currentPlayer].passBall()) {
 		cout << " Pass Succeeded" << endl;
 		players_possesion(nextPlayer);
