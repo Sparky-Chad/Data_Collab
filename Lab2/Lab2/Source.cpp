@@ -62,7 +62,7 @@ int main() {
 	
 	cout << "Beginning game"<<endl;
 	while (user_possesions < 20) {
-		
+
 		//begins the turn and deals with possesions
 		players_turn_start();
 		//ends the turn and begins the ai turn
