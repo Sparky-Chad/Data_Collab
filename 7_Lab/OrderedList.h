@@ -166,6 +166,9 @@ bool OrderedList<T>::isFull()
     return size == MAX_SIZE;
 }
 
+    //  shift(int current, bool forward)
+    //  Description:
+    //  Shifts the OrderedList in a certain direction based 
 template<class T>
 void OrderedList<T>::shift(int current, bool forward)
 {
