@@ -1,6 +1,6 @@
 
-#ifndef ORDEREDLIST_H
-#define ORDEREDLIST_H
+#ifndef ORDEREDLIST_H_
+#define ORDEREDLIST_H_
 
 const int MAX_SIZE = 25;
 const bool ADD_SHIFT = true;
@@ -12,7 +12,7 @@ public:
     // Creates arr of 25 items as an array to them
     OrderedList()
     {
-        arr = new *T[MAX_SIZE];
+        arr = new T*[MAX_SIZE];
         size = 0;
         for(int i =0; i > MAX_SIZE; i++) 
         {
@@ -21,30 +21,9 @@ public:
     }
 
     // Deconstructs this class and all elements within the list
-    virtual ~OrderedList() 
-    {
-        for(int i = 0; i < MAX_SIZE; i++ )
-        {
-            if(arr[i] != nullptr) 
-            {
-                delete arr[i];
-                arr[i] = nullptr
-            }
-        }
-        delete[] arr;
-    }
+    
+    virtual ~OrderedList();
 
-
-    // Exception Classes ******************************
-
-    class ItemNotDefinedException
-    {};
-
-    class ListFullException
-    {};
-
-    class ListEmptyException
-    {};
 
     // Public Member Functions *************************
 
@@ -58,6 +37,17 @@ public:
     
     bool isFull();
 
+    // Exception Classes ******************************
+
+    class ItemNotDefinedException
+    {};
+
+    class ListFullException
+    {};
+
+    class ListEmptyException
+    {};
+
 protected:
     T** arr;
 
@@ -67,8 +57,19 @@ protected:
 
 };
 
-#endif 
-
+    //  Deconstructor of the class
+template<class T> OrderedList<T>::~OrderedList() 
+    {
+        for(int i = 0; i < MAX_SIZE; i++ )
+        {
+            if(arr[i] != nullptr) 
+            {
+                delete arr[i];
+                arr[i] = nullptr;
+            }
+        }
+        delete[] arr;
+    }
     //  Adds given item to the first instance in which the item is less than the arr at index 
     //  or the arr at index is null. Shifts the list to fit it.
     //  Defualts to a value of the same as within the list will be inserted above it
@@ -89,10 +90,10 @@ void OrderedList<T>::addItem(T in)
     {
         if(arr[i] == nullptr)
         {
-            arr[i] = in;
+            arr[i] = inp;
             break;
         }
-        if(arr[i] > in)
+        if(*arr[i] > in)
         {
             shift(i, ADD_SHIFT);
             arr[i] = inp;
@@ -125,7 +126,7 @@ T OrderedList<T>::removeItem(T in)
 
     for(int i = 0; i < MAX_SIZE; i++) 
     {
-        if(arr[i] == in)
+        if(*arr[i] == in)
         {
             delete arr[i];
             size--;
@@ -173,7 +174,7 @@ template<class T>
 void OrderedList<T>::shift(int current, bool forward)
 {
     // Create a step variable to handle direction
-    int step = (2*forward) - 1;
+    int step = (-2*forward) + 1;
 
     int start;
     int end;
@@ -196,3 +197,4 @@ void OrderedList<T>::shift(int current, bool forward)
      
 }
 
+#endif

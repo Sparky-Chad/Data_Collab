@@ -1,7 +1,6 @@
 
 #include <iostream>
 #include "OrderedList.h"
-#include "BlanksOrderedList.h"
 
 int main() { 
     // testing use of bool to run it
@@ -10,7 +9,7 @@ int main() {
     std::cout << "True = " << outt << std::endl << "False = " << outf << std::endl;
 
     // Create a new OrderedList to begin testing it
-    OrderedList nlist<int> = OrderedList();
+    OrderedList<int> nlist = OrderedList<int>();
 
     for(int i = 0; i < 25; i++)
     {
@@ -28,7 +27,7 @@ int main() {
          }
          catch(OrderedList<int>::ItemNotDefinedException())
          {
-             cout << "Caught that the list does not have 9 twice" << endl;
+            std::cout << "Caught that the list does not have 9 twice" << std::endl;
          }
             
     }

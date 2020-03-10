@@ -1,16 +1,16 @@
-#ifndef BLANKSORDEREDLIST_H
-#define BLANKSORDEREDLIST_H
+#ifndef _BLANKSORDEREDLIST_H_
+#define _BLANKSORDEREDLIST_H_
 
 #include "OrderedList.h"
 #include <math.h>
 namespace blanks {
     template<class T> class BlanksOrderedList : public OrderedList<T>
     {
-
     public:
 
-        BlanksOrderedList():OrderedList()
+        BlanksOrderedList():OrderedList<T>{}
         {}
+
         // Redefines the addItem class
         void addItem(T);
 
@@ -39,7 +39,6 @@ namespace blanks {
     };
 }
 #endif
-
 
 /*  This version will begin its look at the begining of the class and actively ignore nullptrs
 *   
