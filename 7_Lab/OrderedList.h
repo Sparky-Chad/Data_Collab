@@ -6,6 +6,8 @@ const int MAX_SIZE = 25;
 const bool ADD_SHIFT = true;
 const bool REMOVE_SHIFT = false;
 
+#include <iostream>
+
 template<class T> class OrderedList 
 {
 public:
@@ -64,6 +66,8 @@ template<class T> OrderedList<T>::~OrderedList()
         {
             if(arr[i] != nullptr) 
             {
+                std::cout << "arr[" << i << "}: " << *arr[i] << 
+                " --- " << arr[i] << std::endl;
                 delete arr[i];
                 arr[i] = nullptr;
             }
@@ -126,12 +130,16 @@ T OrderedList<T>::removeItem(T in)
 
     for(int i = 0; i < MAX_SIZE; i++) 
     {
-        if(*arr[i] == in)
+        if(arr[i] != nullptr)
         {
-            delete arr[i];
-            size--;
-            shift(i, REMOVE_SHIFT);
-            return in;
+            if(*arr[i] == in)
+            {
+                delete arr[i];
+                arr[i] = nullptr;
+                size--;
+                shift(i, REMOVE_SHIFT);
+                return in;
+            }
         }
     }
 }
@@ -192,8 +200,12 @@ void OrderedList<T>::shift(int current, bool forward)
 
     for(int i = start; i != end; i+=step)
     {
-        arr[i] = arr[i+step]-1;
+        if(arr[i+step] != nullptr)
+        {
+            arr[i] = arr[i+step];
+        }
     }
+    arr[end] = nullptr;
      
 }
 
