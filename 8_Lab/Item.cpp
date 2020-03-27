@@ -12,6 +12,7 @@ string part::GetPartInfo(){
 	char sku = static_cast<char>(SKU);
 	string temp = "Part Number: " + sku;
 	temp =" Description: "+ Description;
+	return temp;
 }
 
 int part::GetPrice(){
