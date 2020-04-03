@@ -4,7 +4,7 @@
 #define BINARYTREE_H
 
 #include <iostream>
-#inclde "node.h"
+#include "Word.h"
 
 
 using namespace std
