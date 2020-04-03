@@ -1,4 +1,15 @@
 
+
+// TODO
+// Redefine the file output so it sends the ascending list
+// Redefine references to catalog tree to tree
+// Bug test the current input to make sure it correctly interfaces with the tree
+
+// User Defined word class
+#include "Word.h"
+// User defined binary tree
+#include "CatalogTree.h"
+
 #include <stdio.h>
 #include <iostream>
 // strings
@@ -54,6 +65,8 @@ struct Catalog {
     string title;
     string first_name;
     string last_name;
+    Word word();
+    CatalogTree counter;
     int word_count = 0;
     Letter_Count count[26];
     int line_count = 0;
@@ -70,6 +83,10 @@ bool word_check(char);
 string catalog_card(Catalog &);
 // Saves the catalog to a file
 void output_catalog(string&);
+// Builds a word string from characters inputed by the program
+void build_word(string&, char);
+// Adds character to the search tree
+void add_word(CatalogTree&, Word&);
 
 //Returns if the user wants to continue
 bool continue_entry();
@@ -78,8 +95,10 @@ int letter_total(Catalog&);
 // Prints the letter frequency percent
 void letter_output(Catalog&);
 
-int main() {
 
+// Create a global catalog tree to store information
+
+int main() {
     do {
         //create empty file stream object
         fstream ifile;
@@ -138,6 +157,8 @@ Catalog fill_catalog(fstream *ifile) {
     
     //init the output catalog
     Catalog output;
+    // init the output tree
+    output.counter = CatalogTree();
 
     //init letter counter
     for(int i = 0; i < 26; i++) {
@@ -164,6 +185,9 @@ Catalog fill_catalog(fstream *ifile) {
         //continues if the line is not contents
     } while(!(temp.substr(0,9) == "Contents:"));
 
+
+    // temporary word string memory
+    string wordy;
 
     //while not end of file
     while(!(ifile->eof())) {
@@ -208,8 +232,17 @@ Catalog fill_catalog(fstream *ifile) {
                 if(!word_check(past)){
                     //increase word count
                     output.word_count++;
+                    Word out = wordy;
+                    add_word(counter, out);
+                    wordy = "";
                 }
             }
+            else
+            {
+                build_word(wordy, current);
+            }
+            
+            
             past = current;
         }
     }
@@ -305,4 +338,36 @@ void output_catalog(string &out) {
     //close file
     ofile.close();
 
+}
+
+void build_word(string& word, char in)
+{
+    word += in;
+}
+
+void add_word(CatalogTree& tree, Word& in)
+{
+    // finds the word in the tree if able
+    Word* temp = tree.find(in);
+
+    if(temp == nullptr)
+    {
+        try
+        {
+            // if it did not find an instance of itself then insert itself into there
+            tree.insert(in);
+        }
+        catch(CatalogTree::ItemExistsException e)
+        {
+            cout << "Error when add_word is called" << endl;
+            cout << e.print() << endl;
+            throw e;
+        }
+    }
+    else
+    {
+        // if it did find an instance of itself then iterate because it is the pointer to the word within
+        // the tree it does not need to reinsert
+        (*temp)++;
+    }
 }

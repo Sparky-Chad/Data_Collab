@@ -42,22 +42,21 @@ public:
 
     // Find
     // Gets the element from the list following the binary tree does not remove the item and returns a pointer to the node
-    node* find(Word);
+    Word* find(Word);
 
     // Remove
     // removes the node from the tree without deallocating it and returns the pointer to it
     node* remove(Word);
 
     // GetAllAscending
-    // Returns a dynamically created pointer array which is an array of pass by value nodes to prevent issues in memory
-    // accepts a node*
-    node* GetAllAscending(node*);
+    // Returns a dynamically created pointer array which is an array of all nodes in ascending order
+    node* GetAllDescending(node*);
     // Overload
     // gets all ascending from the root
     node* GetAllAscending();
 
     // GetAllDescending
-    // Returns a dynamically created pointer array which is an array of pass by value nodes
+    // Returns a dynamically created pointer array which is an array of all nodes in descending order
     node* GetAllDescending(node*);
     // Overload
     // Returns from root node
@@ -69,7 +68,7 @@ public:
 
     // Exceptions
     class ItemExistsException
-    { std::string print() {return _ITEM_EXISTS_MESSAGE_;}};
+    { public: std::string print() {return _ITEM_EXISTS_MESSAGE_;}};
 };
 
 #endif
