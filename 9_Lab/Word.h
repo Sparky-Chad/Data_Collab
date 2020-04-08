@@ -19,7 +19,7 @@ public:
         // The word uses string compare to decide how word will interact through the < > == operators
         _word = "";
         // keep a count of words
-        _count = 0;
+        _count = 1;
     }
     // Fill constructor first calls the defualt constructor before filling word
     Word(std::string in) : Word()
@@ -32,6 +32,8 @@ public:
     int count() { return _count; }
     std::string word() { return _word; }
 
+    // Returns a quick string version of the system for if there is a want to print in this formatting
+    std::string printr() { return ("Word: " + _word + " | " + std::to_string(_count)); }
     // overloaded postfix and prefix incrementors
     // so one can do ++Word or Word++ to do this
     Word& operator++() { this->_count++; return *this; }

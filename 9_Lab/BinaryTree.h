@@ -38,7 +38,8 @@ public:
 	node* remove(T data);
 
 	//exceptions
-	class inTreeAlready{};
+	class inTreeAlready
+	{ public: string print() { return " Item is Located in tree Already"; } };
 
 private:
 	node* root;
@@ -140,10 +141,10 @@ typename BinaryTree<T>::node* BinaryTree<T>::find(node* nnode, T val) {
 		return nullptr;
 	}
 	else {
-		if (val == nnode->value) {
+		if (val == nnode->data) {
 			return nnode;
 		}
-		if (val > nnode->value) {
+		if (val > nnode->data) {
 			return find(nnode->right, val);
 		}
 		else {
@@ -185,21 +186,21 @@ int BinaryTree<T>::getAllArray(node** arr, bool ascending, node* temp, int i)
 {
 	// get past to get the difference between the two to return
 	int past = i;
-	if(temp = nullptr)
+	if(temp == nullptr)
 	{
-		return 0;
+		return 1;
 	}
 	if(ascending)
 	{
 		i += getAllArray(arr, ascending, temp->left, i);
-		arr[i];
+		arr[i-1] = temp;
 		i += getAllArray(arr, ascending, temp->right, i);
 	}	
 	else
 	{
 		i += getAllArray(arr, ascending, temp->right, i);
-		arr[i] = temp;
-		getAllArray(arr, ascending, temp->left, i);
+		arr[i-1] = temp;
+		i += getAllArray(arr, ascending, temp->left, i);
 	}
 	return i - past;
 }
@@ -477,7 +478,7 @@ void BinaryTree<T>::rotate_right(node* parent, node* gparent)
         // the parent right
         
         // which point is actually gparent wanting to point too
-        if(gparent->right->data == parent->data)
+        if(gparent->right == parent)
         {
             gparent->right = t;
         }
@@ -544,16 +545,14 @@ void BinaryTree<T>::rotate_left(node* parent, node* gparent)
         // the parent right
         
         // which point is actually gparent wanting to point too
-        if(gparent->right->data == parent->data)
+        if(gparent->right == parent)
         {
-            gparent = gparent->right;
+            gparent->right = t;
         }
         else
         {
-            gparent = gparent->left;
+            gparent->left = t;
         }
-        
-    	gparent = t;
         // now we move parent down to the leftmost right
         if (t->right == nullptr)
         {
