@@ -6,6 +6,14 @@
 #define UPWARD true
 #define DOWNWARD false
 
+#ifdef COUNTER
+extern int binaryspot;
+binaryspot = 0;
+#define COUNT_BINARY binaryspot++;
+#else
+#define COUNT_BINARY
+#endif
+
 using namespace std;
 
 
@@ -114,6 +122,7 @@ void BinaryTree<T>::insert(BinaryTree<T>::node** nnode, T val) {
 		}
 	}
 	else {
+		COUNT_BINARY
 		if (val > iter->data) {
 			nnode = &(iter->right);
 			insert(nnode, val);
@@ -141,6 +150,7 @@ typename BinaryTree<T>::node* BinaryTree<T>::find(node* nnode, T val) {
 		return nullptr;
 	}
 	else {
+		COUNT_BINARY
 		if (val == nnode->data) {
 			return nnode;
 		}
@@ -230,6 +240,7 @@ typename BinaryTree<T>::node* BinaryTree<T>::remove(T value) {
 	node* temp = this->root;
 	while (temp != nullptr)
 	{
+		COUNT_BINARY
 		if(value > temp->data)
 		{
 			parent = temp;
