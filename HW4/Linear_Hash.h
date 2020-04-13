@@ -18,8 +18,6 @@
 // the macros work properly
 #ifdef COUNTER
     extern int searchspot;
-    searchspot = 0; 
-
     // Macro search count which will then iterate the searchspot int
     #define SEARCHCOUNT searchspot++;
 

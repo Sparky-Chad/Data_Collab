@@ -6,8 +6,7 @@
 
 // Set up counter macros
 #ifdef COUNTER
-extern int shashspot;
-hashspot = 0;
+extern int hashspot;
 #define HASH_COUNT hashspot++;
 #else
 #define HASH_COUNT

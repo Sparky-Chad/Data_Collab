@@ -8,7 +8,6 @@
 
 #ifdef COUNTER
 extern int binaryspot;
-binaryspot = 0;
 #define COUNT_BINARY binaryspot++;
 #else
 #define COUNT_BINARY
