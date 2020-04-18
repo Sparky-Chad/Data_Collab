@@ -17,14 +17,14 @@
 // the header file to only be linked while compiled to ensure
 // the macros work properly
 #ifdef COUNTER
-    extern int searchspot;
-    // Macro search count which will then iterate the searchspot int
-    #define SEARCHCOUNT searchspot++;
+extern int searchspot;
+// Macro search count which will then iterate the searchspot int
+#define SEARCHCOUNT searchspot++;
 
 #else
     // If not going to be a counting thing then define
     // the macro keyword of searchcount to nothing
-    #define SEARCHCOUNT
+#define SEARCHCOUNT
 
 #endif
 using namespace std;
@@ -41,7 +41,7 @@ public:
     int insert(int);
 
     // The find function will return the given object that it had been directed to move too
-    int* find(int);
+    int find(int);
 
     // The Remove function will return the given value to find and then remove the value from the
     // hash table, while doing this it should also probably also move back any of the other things
@@ -54,15 +54,21 @@ public:
 
     // Exception class for if the insert function finds the value already located within the array
     class ItemExistsException
-    { public: string print() { return "Given item exsists already\n"; } };
-    
+    {
+    public: string print() { return "Given item exsists already\n"; }
+    };
+
     // Item to be removed was not found
     class ItemNotFoundException
-    { public: string print() {return "Given item was not found\n"; } };
+    {
+    public: string print() { return "Given item was not found\n"; }
+    };
 
     // Exception for if an item does not fit due to the fact that there is not enough space
     class HashTableOutOfBounds
-    { public: string print() {return "Hash table is out of bounds\n"; } };
+    {
+    public: string print() { return "Hash table is out of bounds\n"; }
+    };
 private:
 
     int hash(int);
@@ -81,9 +87,9 @@ private:
 // Create the defined template metheds
 Linear_Hash::Linear_Hash()
 {
-    list = new int*[HASH_TABLE_SIZE];
+    list = new int* [HASH_TABLE_SIZE];
     length = 0;
-    
+
     // Fill the list with empty nullptr values
     for (int i = 0; i < HASH_TABLE_SIZE; i++)
     {
@@ -99,9 +105,9 @@ Linear_Hash::Linear_Hash()
 // As it seems heap will always be above this value
 Linear_Hash::~Linear_Hash()
 {
-    for(int i = 0; i < HASH_TABLE_SIZE; i++)
+    for (int i = 0; i < HASH_TABLE_SIZE; i++)
     {
-        if(list[i] != nullptr && ((void *)list[i]) > (void*)0x500)
+        if (list[i] != nullptr && ((void*)list[i]) > (void*)0x500)
         {
             delete list[i];
         }
@@ -117,6 +123,7 @@ Linear_Hash::~Linear_Hash()
 int Linear_Hash::insert(int in)
 {
 
+    SEARCHCOUNT
     // create new pointer value to the given in value
     int* nnode = new int(in);
 
@@ -124,12 +131,12 @@ int Linear_Hash::insert(int in)
     int hash = this->hash(in);
 
     int out = 0;
-    while(this->list[hash] != nullptr)
+    while (this->list[hash] != nullptr)
     {
         // Add one onto the hash to do a linear probe
         hash++;
         SEARCHCOUNT
-        out++;
+            out++;
     }
 
     // Insert the item into that location
@@ -144,57 +151,61 @@ int Linear_Hash::insert(int in)
 
 // TODO:    Look into changing the system to an exponential type of hash or rehashing it till a new 
 //          value can be found by the system so that there is not a need to move the values around too much
-int* Linear_Hash::find(int in)
+int Linear_Hash::find(int in)
 {
+    int out = 1;
     // create the hash to act as the index
     int hash = this->hash(in);
 
+    SEARCHCOUNT
     // Check first for the nullptr to protect the program from a potential crash
     while (list[hash] != nullptr)
     {
         SEARCHCOUNT
-        if(in == *list[hash])
-        {
-            // if the correct thing is found then return that value
-            return list[hash];
+            if (in == *list[hash])
+            {
+                
+                // if the correct thing is found then return that value
+                return out;
 
-        }
+            }
 
         // iterate the hash value
         hash++;
-        
+        out++;
+
     }
 
     // If the correct value is not found then just return a nullptr
-    return nullptr;
+    return 0;
 }
 
-/*  The remove function will act nearly identical to the previous one but will then 
-    check to move back the rest of the values so that they are not affected by the 
-    removal of this node, this would be due to the linear nature of it. The removal 
+/*  The remove function will act nearly identical to the previous one but will then
+    check to move back the rest of the values so that they are not affected by the
+    removal of this node, this would be due to the linear nature of it. The removal
     function will travel to the end of the current hash line. But this could result in
     under or overwriting of data which may cause some potential issues          */
 
     // Returns the value not the pointer of the object
 int Linear_Hash::remove(int in)
 {
-    // Create a starting hash of the value
+    /*// Create a starting hash of the value
     int hash = this->hash(in);
-
+    int out = 0;
     int index = 0;
     while (this->list[hash] != nullptr)
     {
         SEARCHCOUNT
-        if (*this->list[hash] == in)
-        {
-            delete this->list[hash];
-            this->list[hash] = nullptr;
-        }
+            if (*this->list[hash] == in)
+            {
+                delete this->list[hash];
+                this->list[hash] = nullptr;
+            }
         index++;
     }
     // If the end of a line has been reached then the program was unable to 
     // find the inputed value so throw an exception of that
-    if(this->list[hash] == nullptr)
+    if (this->list[hash] == nullptr)
     {
         throw;
     }
@@ -207,7 +218,49 @@ int Linear_Hash::remove(int in)
         // First to check and make sure this line of hashes are proper
         // if not the case then the current hash value is going to be invalid
         // and must be switched to a nullptr
-        if(this->hash(*this->list[hash+1] + index + 1 > hash)) break;
+        if (this->hash(*this->list[hash + 1] + index + 1 > hash)) break;
+
+
+        // Perform a swap so that the new value is nullptr
+        this->list[hash] = this->list[hash + 1];
+        hash++;
+        this->list[hash] = nullptr;
+    }
+
+    length--;
+
+    // After all of the operations are completed then return the value of the system
+    return in; */
+
+    SEARCHCOUNT
+   if(this->length == 0) return 0;
+    // Create a starting hash of the value
+    int hash = this->hash(in);
+    int out;
+    int index = 0;
+    while (this->list[hash] != nullptr || hash > HASH_TABLE_SIZE)
+    {
+        SEARCHCOUNT
+        if (*this->list[hash] == in)
+        {
+            out = *this->list[hash];
+            delete this->list[hash];
+            this->list[hash] = nullptr;
+        }
+        hash++;
+        index++;
+    }
+
+
+    // Now the function will search down the current line of indexes
+    // and move them back by one so that they remain in a linear line
+
+    while (this->list[hash + 1] != nullptr && hash + 1 != HASH_TABLE_SIZE)
+    {
+        // First to check and make sure this line of hashes are proper
+        // if not the case then the current hash value is going to be invalid
+        // and must be switched to a nullptr
+        if((this->hash(*this->list[hash+1]) + index + 1 > hash)) break;
 
 
         // Perform a swap so that the new value is nullptr
@@ -219,7 +272,7 @@ int Linear_Hash::remove(int in)
     length--;
 
     // After all of the operations are completed then return the value of the system
-    return in;
+    return index;
 }
 
 /*
@@ -230,10 +283,10 @@ void Linear_Hash::print()
 {
 
     // Print out the whole array with the hash value next to each item and the index at the front
-    for(int i = 0; i < HASH_TABLE_SIZE; i++)
+    for (int i = 0; i < HASH_TABLE_SIZE; i++)
     {
         cout << to_string(i) << ": ";
-        if(this->list[i] == nullptr)
+        if (this->list[i] == nullptr)
         {
             cout << "****" << endl;
         }

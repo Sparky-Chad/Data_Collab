@@ -96,8 +96,7 @@ T* LinkedList<T>::getItem(T* in)
     if(*temp->data == *in)
     {
         head = temp->next;
-        delete temp;
-        return in;
+        return temp;
     }
     while(temp != nullptr)
     {
@@ -106,8 +105,7 @@ T* LinkedList<T>::getItem(T* in)
 
             temp->previous->next = temp->next;
             temp->next->previous = temp->previous;
-            delete temp;
-            return in;
+            return temp;
         }
     }
 
