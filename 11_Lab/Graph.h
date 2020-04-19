@@ -25,7 +25,15 @@ public:
 
     LinkedList<int> inEdge(int);
 
+    // The Depth Functions will also return linked lists to hold the values that it was able to visit
+    LinkedList<int> DFS(int);
+
+    LinkedList<int> BFS(int);
+
 private:
+
+    // Functions to act as recursive helpers to the Depth and Breadth Search Functions
+    void DFS_Recursive(int, bool*, LinkedList<int>*);
 
     // Checks if both of the indexes are in range and does not need to be passed both of them
     void _in_range_checker(int v = 0, int e = 0);

@@ -2,7 +2,8 @@
 #define LINKEDLIST_H
 #include <string>
 #include <iostream>
-#include "Part.h"
+#include <stdio.h>
+#include <string.h>
 
 
 // Set up counter macros
@@ -28,7 +29,7 @@ private:
     Node* head;
     
     // Holds the current node pointed at
-    Node* current;
+    mutable Node* current;
 public:
     // Constructor
     LinkedList()
@@ -36,6 +37,8 @@ public:
         head = nullptr;
         current = nullptr;
     }
+    // Copy Constructor
+    LinkedList(const LinkedList<T>& in);
 
     // Destructor
     ~LinkedList();
@@ -51,9 +54,9 @@ public:
     T* SeePrev();
     T* SeeAt(int);
     void Reset();
-    void Draw()
-    { return; }
+    void Draw();
 
+    LinkedList<T>& operator=(const LinkedList<T>& in);
     // Exceptions
     class ListIsEmpty
     {
@@ -66,17 +69,98 @@ public:
 
 };
 
-#endif
+// Deep Copy Constructor
+template<class T>
+LinkedList<T>::LinkedList(const LinkedList<T>& in)
+{
+    this->head = nullptr;
+    this->current = nullptr;
+
+    Node* temp = in.head;
+    Node* my_temp = this->head;
+    T* temp_dat = nullptr;
+    Node* nnode = nullptr;
+
+    if(temp != nullptr)
+    {
+        temp_dat = new int(0);
+        memcpy(temp_dat, temp->data, sizeof(temp->data));
+        nnode = new Node{temp_dat};
+        // Set so the head is now this
+        head = nnode;
+
+        temp = temp->next;
+        while(temp != nullptr)
+        {
+            temp_dat = new int(0);
+            memcpy(temp_dat, temp->data, sizeof(Node::data));
+            nnode = new Node{temp_dat};
+
+            my_temp->next = nnode;
+            my_temp->next->previous = my_temp;
+
+            my_temp = my_temp->next;
+
+            temp = temp->next;
+
+        }
+    }
+}
+
+template<class T>
+LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& in)
+{
+    this->head = nullptr;
+    this->current = nullptr;
+
+    Node* temp = in.head;
+    Node* my_temp = this->head;
+    T* temp_dat = nullptr;
+    Node* nnode = nullptr;
+
+    if(temp != nullptr)
+    {
+        temp_dat = new int(0);
+        memcpy(temp_dat, temp->data, sizeof(temp->data));
+        nnode = new Node{temp_dat};
+        // Set so the head is now this
+        head = nnode;
+        my_temp = head;
+        temp = temp->next;
+        while(temp != nullptr)
+        {
+            temp_dat = new int(0);
+            memcpy(temp_dat, temp->data, sizeof(Node::data));
+            nnode = new Node{temp_dat};
+
+            my_temp->next = nnode;
+            my_temp->next->previous = my_temp;
+
+            my_temp = my_temp->next;
+
+            temp = temp->next;
+
+        }
+    }
+
+    return *this;
+}
 
 template<class T>
 LinkedList<T>::~LinkedList()
 {
+    if(head == nullptr) return;
     Node* temp = head;
     while(temp->next != nullptr)
     {
         temp = temp->next;
         delete temp->previous;
+        temp->previous = nullptr;
     }
+    delete temp;
+    temp = nullptr;
+    head = nullptr;
+    current = nullptr;
 } 
 template<class T>
 void LinkedList<T>::addItem(T* in)
@@ -242,6 +326,7 @@ void LinkedList<T>::Reset()
 {
     Node* temp = head;
     head = nullptr;
+    current = nullptr;
     while(temp->next != nullptr)
     {
         temp = temp->next;
@@ -249,8 +334,10 @@ void LinkedList<T>::Reset()
     }  
     delete temp;
 }
-template<>
-void LinkedList<part>::Draw()
+
+
+template <class T>
+void LinkedList<T>::Draw()
 {
     using namespace std;
     Node* temp = head;
@@ -267,7 +354,7 @@ void LinkedList<part>::Draw()
     cout << " |    nullptr" << endl;
     cout << " |      ^" << endl;
     cout << " ↓      |" << endl;
-    cout << "Node | Prev | Data ---> " << temp->data->getSKU() << endl;
+    cout << "Node | Prev | Data ---> " << *temp->data << endl;
 
     temp = temp->next;
     while(temp != nullptr)
@@ -275,7 +362,7 @@ void LinkedList<part>::Draw()
         cout << " | ^" << endl;
         cout << " | |-----" << endl;
         cout << " ↓      |" << endl;
-        cout << "Node | Prev | Data ---> " << temp->data->getSKU() << endl;
+        cout << "Node | Prev | Data ---> " << *temp->data << endl;
 
         temp = temp->next;
     }
@@ -285,3 +372,5 @@ void LinkedList<part>::Draw()
     cout << " ↓" << endl;
     cout << "nullptr\n\n\n";
 }
+
+#endif
