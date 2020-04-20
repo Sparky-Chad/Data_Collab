@@ -15,44 +15,32 @@
 Graph::Graph()
 {
     size = GRAPH_DEFAULT_SIZE;
-    graph = new bool*[size];
+    graph = new LinkedList<int>[size];
     // Assign for each row a new 
 
     for(int i = 0; i < size; i++)
     {
-        graph[i] = new bool[size];
-        for(int j = 0; j < size; j++)
-        {
-            // Set the normal value to false
-            graph[i][j] = false;
-        }
+        // Should init the linked lists
+        graph[i];
     }
 }
 
 Graph::Graph(int in_size)
 {
     size = in_size;
-    graph = new bool*[size];
+    graph = new LinkedList<int>[size];
 
     //Assign a row to each element
     for(int i = 0; i < size; i++)
     {
-        graph[i] = new bool[size];
-        for(int j = 0; j < size; j++)
-        {
-            // Set normal value to false
-            graph[i][j] = false;
-        }
+        graph[i];
     }
 }
 
 Graph::~Graph()
 {
-    for(int i = 0; i < size; i++)
-    {
-        delete[] graph[i];
-    }
-    delete graph;
+
+    delete[] graph;
     size = 0;
 }
 
@@ -60,11 +48,11 @@ void Graph::addEdge(int v, int e)
 {
     _in_range_checker(v, e);
     
-    if(graph[v][e]) throw GraphExceptions::OutEdgeExistsAlready();
+    if(graph[v].isinList(e)) throw GraphExceptions::OutEdgeExistsAlready();
 
     // If there were no exceptions then add this to the value
     // Now the vertice v has and edge outbound to e
-    graph[v][e] = true;
+    graph[v].addItem(new int(e));
     
 }
 
@@ -75,9 +63,10 @@ void Graph::removeEdge(int v, int e)
 {
     _in_range_checker(v, e);
 
-    if(!graph[v][e]) throw GraphExceptions::OutEdgeDoesntExist();
+    if(!graph[v].isinList(e)) throw GraphExceptions::OutEdgeDoesntExist();
 
-    graph[v][e] = false;
+    int* temp = graph[v].getItem(e);
+    delete temp;
 }
 
 // Check Edge will return a boolean of whether v has an outbound edge with e
@@ -86,7 +75,7 @@ bool Graph::hasEdge(int v, int e)
     _in_range_checker(v, e);
 
     // Return if the edge exists
-    return graph[v][e];
+    return graph[v].isinList(e);
 }
 
 // Return a linked list of the ints which this shares an
@@ -94,17 +83,9 @@ bool Graph::hasEdge(int v, int e)
 LinkedList<int> Graph::outEdge(int v)
 {
     _in_range_checker(v);
-    LinkedList<int> output;
 
-    // Now iterate through the list and return the index 
-    // if it contains an outbound edge
-    for(int i = 0; i < size; i++)
-    {
-        if(graph[v][i])
-        {
-            output.addItem(new int(i));
-        }
-    }
+    // Copy construct to copy the outward edges of the list
+    LinkedList<int> output(graph[v]);
 
     // Return the linked list
     return output;    
@@ -121,7 +102,7 @@ LinkedList<int> Graph::inEdge(int v)
     // inbound connection to the given vertice
     for(int i = 0; i < size; i++)
     {
-        if(graph[i][v])
+        if(graph[i].isinList(v))
         {
             output.addItem(new int(i));
         }

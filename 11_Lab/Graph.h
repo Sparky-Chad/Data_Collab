@@ -42,7 +42,7 @@ private:
     int size;
     // Create an array of booleans to represent the outer and inner edges
     // This array will use the first index as the root vertice and the row as the outbound one
-    bool** graph;
+    LinkedList<int>* graph;
 
 };
 

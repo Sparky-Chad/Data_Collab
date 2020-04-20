@@ -88,6 +88,7 @@ LinkedList<T>::LinkedList(const LinkedList<T>& in)
         nnode = new Node{temp_dat};
         // Set so the head is now this
         head = nnode;
+        my_temp = head;
 
         temp = temp->next;
         while(temp != nullptr)
@@ -218,7 +219,7 @@ T* LinkedList<T>::getItem(T in)
     while(temp != nullptr)
     {
         HASH_COUNT
-        if(*temp->data == *in)
+        if(*temp->data == in)
         {
 
             temp->previous->next = temp->next;
