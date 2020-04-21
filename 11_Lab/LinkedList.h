@@ -223,7 +223,7 @@ T* LinkedList<T>::getItem(T in)
         {
 
             temp->previous->next = temp->next;
-            temp->next->previous = temp->previous;
+            if(temp->next != nullptr) temp->next->previous = temp->previous;
             T* out = temp->data;
             delete temp;
             return out;
