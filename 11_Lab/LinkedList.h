@@ -315,9 +315,11 @@ T* LinkedList<T>::SeeAt(int to)
     Node* temp = head;
     for(int i = 0; i < to; i++)
     {
+        if(temp == nullptr) return nullptr;
         temp = temp->next;
     }
     current = temp;
+    if(temp == nullptr) return nullptr;
     return temp->data;
 }
 
@@ -328,10 +330,10 @@ void LinkedList<T>::Reset()
     Node* temp = head;
     head = nullptr;
     current = nullptr;
-    while(temp->next != nullptr)
+    while(temp != nullptr)
     {
         temp = temp->next;
-        delete temp->previous;
+        if(temp != nullptr) delete temp->previous;
     }  
     delete temp;
 }
