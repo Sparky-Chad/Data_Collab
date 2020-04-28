@@ -14,6 +14,10 @@ extern int hashspot;
 #define HASH_COUNT
 #endif
 
+// Want to create some form of default algorithm fucntion type
+template <class T>
+using algType = void (*)(T*, int); 
+
 template <class T>
 class LinkedList
 {
@@ -43,6 +47,15 @@ public:
     bool isEmpty();
     int Size();
 
+    // Set algorithm, expected that the algorithm can handle an array
+    // and return it biggest to smallest.
+    void setAlgorithm(algType<T> alg) { this->algorithm = alg; }
+
+
+    // Sorts in ascending order
+    void sortAscending();
+    void sortDescending();
+
     T* SeeNext();
     T* SeePrev();
     T* SeeAt(int);
@@ -64,8 +77,12 @@ protected:
     // Holds the value of the top of the list
     Node* head;
     
+
     // Holds the current node pointed at
     mutable Node* current;
+
+    // Holds the type of algorithm being used
+    algType<T> (*algorithm);
 };
 
 // Deep Copy Constructor
@@ -311,6 +328,53 @@ T* LinkedList<T>::SeePrev()
 }
 
 template <class T>
+void LinkedList<T>::sortAscending()
+{
+    // The primary thing to do will be to deconstruct the linked list
+    // into an array of T
+
+    int size = this->Size();
+
+    T* arr = new T[size];
+
+    arr[0] = this->SeeAt(0);
+
+    for(int i = 1; i < size; i++)
+        arr[i] = *this->SeeNext()->data;
+
+    this->algorithm(arr, size);
+
+    this->Reset();
+
+    for(int i = size-1; i>=0; i--)
+        this->addItem(new T(arr[i]));
+}
+
+template <class T>
+void LinkedList<T>::sortDescending()
+{
+    // The primary thing to do will be to deconstruct the linked list
+    // into an array of T
+
+    int size = this->Size();
+
+    T* arr = new T[size];
+
+    arr[0] = this->SeeAt(0);
+
+    for(int i = 1; i < size; i++)
+        arr[i] = *this->SeeNext()->data;
+
+    this->algorithm(arr, size);
+
+    this->Reset();
+
+    for(int i = 0; i < size; i++)
+        this->addItem(new T(arr[i]));
+}
+
+
+template <class T>
 T* LinkedList<T>::SeeAt(int to)
 {
     Node* temp = head;
@@ -328,19 +392,15 @@ T* LinkedList<T>::SeeAt(int to)
 template <class T>
 void LinkedList<T>::Reset()
 {
-    if(head == nullptr) return;
     Node* temp = head;
-    while(temp->next != nullptr)
-    {
-        Node* ntemp = temp->next;
-        delete temp;
-        temp = ntemp;
-        temp->previous = nullptr;
-    }
-    delete temp;
-    temp = nullptr;
     head = nullptr;
     current = nullptr;
+    while(temp != nullptr)
+    {
+        temp = temp->next;
+        if(temp != nullptr) delete temp->previous;
+    }  
+    delete temp;
 }
 
 

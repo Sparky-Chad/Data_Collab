@@ -76,6 +76,7 @@ template <class T>
 void Queue<T>::empty() {
 
     this->Reset();
+    this->head = nullptr;
     this->rear = nullptr;
     this->size = 0;
 
@@ -108,7 +109,7 @@ T Queue<T>::deque() {
         typename LinkedList<T>::Node* temp = this->rear;
         this->rear = this->rear->previous;
 
-        int out = *temp->data;
+        T out = *temp->data;
         delete temp->data;
         delete temp;
 
@@ -118,7 +119,8 @@ T Queue<T>::deque() {
     }
     else
     {
-        int out = *this->rear->data;
+        this->head = nullptr;
+        T out = *this->rear->data;
         delete rear->data;
         delete rear;
         this->rear = nullptr;
